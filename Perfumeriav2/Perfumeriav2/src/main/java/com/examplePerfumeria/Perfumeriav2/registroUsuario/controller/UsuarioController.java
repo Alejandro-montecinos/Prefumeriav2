@@ -3,6 +3,7 @@ package com.examplePerfumeria.Perfumeriav2.registroUsuario.controller;
 import com.examplePerfumeria.Perfumeriav2.registroUsuario.model.Usuario;
 import com.examplePerfumeria.Perfumeriav2.registroUsuario.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +29,13 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> crearUsuario(@RequestBody Usuario usuario){
-        Usuario nuevo = usuarioService.save(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
-
+    public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
+        try {
+            Usuario nuevo = usuarioService.save(usuario);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Error: RUN duplicado");
+        }
     }
 
 
