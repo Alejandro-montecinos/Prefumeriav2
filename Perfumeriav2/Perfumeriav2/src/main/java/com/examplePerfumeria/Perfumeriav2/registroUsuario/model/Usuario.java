@@ -1,38 +1,25 @@
 package com.examplePerfumeria.Perfumeriav2.registroUsuario.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "usuario")
+@Table(name = "usuario", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "run"),
+        @UniqueConstraint(columnNames = "correo")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Usuario {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(unique = true,length = 13, nullable = false)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(nullable = false, length = 13)
     private String run;
-
-    @Column(nullable = false)
-    private String nombre;
-
-    @Column(nullable = false)
-    private String apellido;
-
-    @Column(nullable = true)
+    @Column(nullable = false) private String nombre;
+    @Column(nullable = false) private String apellido;
     private Date fechaDeNacimiento;
-
-    @Column(nullable = false)
-    private String correo;
-
-    @Column(nullable = false)
-    private String contrasenia;
+    @Column(nullable = false) private String correo;
+    @Column(nullable = false) private String contrasenia;
 }
